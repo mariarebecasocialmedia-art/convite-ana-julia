@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Convite · 15 anos da Ana Julia</title>
+<meta name="description" content="Você está convidado(a) para os 15 anos da Ana Julia — 05/12/2026 às 20h, Talina Eventos.">
+<meta property="og:title" content="15 anos da Ana Julia ✨">
+<meta property="og:description" content="Uma noite de princesa, sonhos e emoções. Toque para abrir o convite.">
+<meta property="og:image" content="capa.jpg">
+<meta name="theme-color" content="#f4b8c8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --rose:#9a2245; --rose-soft:#c9577a; --pink:#f6c9d6; --silver:#e9e4ea;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;background:#2a1520;overflow:hidden}
+  body{font-family:'Quicksand',system-ui,sans-serif;color:var(--rose)}
+  .bg{position:fixed;inset:-40px;background:url(final.jpg) center/cover;filter:blur(28px) brightness(.75) saturate(1.1);transform:scale(1.1)}
+  .stage{
+    position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:min(100vw, calc(100dvh * 9 / 16));aspect-ratio:9/16;
+    overflow:hidden;background:#000;box-shadow:0 0 60px rgba(0,0,0,.45);
+  }
+  @supports not (height:100dvh){ .stage{width:min(100vw, calc(100vh * 9 / 16))} }
+  video,.final{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  .final{opacity:0;transition:opacity .6s ease;pointer-events:none}
+  .done .final{opacity:1}
+
+  /* Tela de abertura */
+  .intro{
+    position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:10% 8%;cursor:pointer;
+    background:
+      radial-gradient(ellipse at 50% 40%, rgba(255,240,245,.25), rgba(60,10,30,.55) 75%),
+      url(capa.jpg) center/cover;
+    transition:opacity .7s ease, visibility .7s;
+  }
+  .intro.hide{opacity:0;visibility:hidden}
+  .card{
+    background:rgba(255,238,243,.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+    border:1.5px solid rgba(255,255,255,.9);border-radius:22px;padding:9% 8% 8%;width:100%;
+    box-shadow:0 10px 40px rgba(80,10,40,.35), inset 0 0 0 6px rgba(255,255,255,.35);
+  }
+  .card small{display:block;font-size:clamp(11px,3.4vw,15px);letter-spacing:.18em;text-transform:uppercase;color:var(--rose-soft);font-weight:600}
+  .card h1{font-family:'Great Vibes',cursive;font-weight:400;font-size:clamp(46px,15vw,74px);line-height:1.05;margin:.25em 0 .05em;
+    background:linear-gradient(180deg,#8f8a93,#d9d6dc 45%,#6f6a74);-webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 1px 0 rgba(255,255,255,.8))}
+  .card p{font-size:clamp(13px,3.9vw,17px);color:var(--rose)}
+  .open{
+    margin-top:1.4em;display:inline-flex;align-items:center;gap:.5em;border:0;cursor:pointer;
+    font:600 clamp(14px,4vw,17px) 'Quicksand',sans-serif;color:#fff;letter-spacing:.04em;
+    padding:.95em 1.6em;border-radius:999px;
+    background:linear-gradient(135deg,#d4547d,#9a2245);box-shadow:0 6px 20px rgba(154,34,69,.45);
+    animation:pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 6px 20px rgba(154,34,69,.45)}50%{transform:scale(1.05);box-shadow:0 8px 30px rgba(212,84,125,.6)}}
+  .hint{margin-top:1em;font-size:12px;color:rgba(154,34,69,.75)}
+
+  /* Tela (vídeo + convite final) que encolhe para revelar os botões */
+  .screen{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;
+    transition:top .9s cubic-bezier(.22,.8,.3,1),left .9s cubic-bezier(.22,.8,.3,1),width .9s cubic-bezier(.22,.8,.3,1),height .9s cubic-bezier(.22,.8,.3,1),border-radius .9s,box-shadow .9s;z-index:2}
+  .stage::before{content:"";position:absolute;inset:-20px;background:url(final.jpg) center/cover;filter:blur(14px) brightness(1.04);transform:scale(1.08)}
+  .stage::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 85%,rgba(255,255,255,.35),rgba(255,255,255,0) 60%);pointer-events:none}
+  .reveal .screen{top:2%;left:14%;width:72%;height:72%;border-radius:14px;
+    box-shadow:0 10px 30px rgba(120,20,60,.35),0 0 0 2px rgba(255,255,255,.7)}
+
+  .btns{position:absolute;z-index:4;left:0;right:0;bottom:2.6%;height:19%;
+    display:flex;justify-content:center;align-items:flex-end;gap:3.2%;pointer-events:none}
+  .btn{height:100%;display:block;opacity:0;transform:translateY(30px) scale(.92);
+    transition:opacity .6s ease,transform .6s cubic-bezier(.22,.8,.3,1);filter:drop-shadow(0 6px 10px rgba(120,20,60,.3))}
+  .btn img{height:100%;width:auto;display:block;animation:breathe 2.6s ease-in-out infinite}
+  .btn:nth-child(2) img{animation-delay:.35s} .btn:nth-child(3) img{animation-delay:.7s}
+  @keyframes breathe{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.035);filter:brightness(1.08)}}
+  .reveal .btns{pointer-events:auto}
+  .reveal .btn{opacity:1;transform:none}
+  .reveal .btn:nth-child(1){transition-delay:.55s} .reveal .btn:nth-child(2){transition-delay:.75s} .reveal .btn:nth-child(3){transition-delay:.95s}
+  .btn:active img{transform:scale(.95)}
+
+  /* Controles pequenos */
+  .ctl{position:absolute;z-index:6;display:flex;gap:8px;right:3%;bottom:2.2%}
+  .done .ctl{bottom:auto;top:1.2%;right:1.5%}
+  .done .ctl button{background:rgba(154,34,69,.55);font-size:11px;padding:.45em .8em}
+  .ctl button{border:0;cursor:pointer;font:600 12px 'Quicksand',sans-serif;color:#fff;
+    background:rgba(60,15,35,.45);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+    padding:.55em .95em;border-radius:999px;display:none}
+  .playing .skip{display:inline-block}
+  .done .replay,.playing .mute,.done .mute{display:inline-block}
+
+  /* Aviso (sem número de WhatsApp) */
+  .toast{position:absolute;z-index:7;left:50%;bottom:6%;transform:translate(-50%,20px);opacity:0;
+    background:rgba(255,240,245,.95);color:var(--rose);font-size:13px;font-weight:600;padding:.8em 1.1em;border-radius:12px;
+    box-shadow:0 6px 20px rgba(0,0,0,.25);transition:.35s;width:max-content;max-width:86%;text-align:center}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<main class="stage" id="stage">
+  <div class="screen">
+    <video id="v" src="video.mp4" playsinline webkit-playsinline preload="auto" poster="capa.jpg"></video>
+    <img class="final" src="final.jpg" alt="Convite dos 15 anos de Ana Julia — 05/12/2026 às 20h, Talina Eventos, Rua Pedro Suzart, 1370, Brasília, Feira de Santana - BA">
+  </div>
+
+  <nav class="btns">
+    <a class="btn" id="btnMapa" target="_blank" rel="noopener"><img src="btn-mapa.png" alt="Localização no mapa"></a>
+    <a class="btn" id="btnRsvp" target="_blank" rel="noopener"><img src="btn-rsvp.png" alt="Confirmar presença"></a>
+    <a class="btn" id="btnSite" target="_blank" rel="noopener"><img src="btn-site.png" alt="Acesse aqui o meu site"></a>
+  </nav>
+
+  <div class="intro" id="intro">
+    <div class="card">
+      <small>Você recebeu um convite</small>
+      <h1>Ana Julia</h1>
+      <p>Meus 15 anos ✨</p>
+      <button class="open" id="open">💌 Toque para abrir</button>
+      <div class="hint">Aumente o volume 🔊</div>
+    </div>
+  </div>
+
+  <div class="ctl">
+    <button class="mute" id="mute">🔊</button>
+    <button class="skip" id="skip">Pular ›</button>
+    <button class="replay" id="replay">↻ Ver de novo</button>
+  </div>
+  <div class="toast" id="toast"></div>
+</main>
+
+<script>
+/* ===== Configuração do convite ===== */
+const CONFIG = {
+  mapa: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("Talina Eventos, Rua Pedro Suzart, 1370 - Brasília, Feira de Santana - BA, 44088-276"),
+  whatsapp: "557581648847",   // só números: DDI + DDD + número
+  mensagem: "Olá! Confirmo minha presença nos 15 anos da Ana Julia, no dia 05/12/2026 💖\nNome: ",
+  site: "https://ana-julia-presentes.vercel.app"
+};
+/* =================================== */
+
+const $ = id => document.getElementById(id);
+const v = $('v'), stage = $('stage');
+$('btnMapa').href = CONFIG.mapa;
+$('btnSite').href = CONFIG.site;
+const rsvp = $('btnRsvp');
+if (CONFIG.whatsapp) {
+  rsvp.href = "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(CONFIG.mensagem);
+} else {
+  rsvp.removeAttribute('href');
+  rsvp.addEventListener('click', e => { e.preventDefault(); toast('A confirmação de presença será liberada em breve 💖'); });
+}
+
+let t;
+function toast(msg){ const el=$('toast'); el.textContent=msg; el.classList.add('show'); clearTimeout(t); t=setTimeout(()=>el.classList.remove('show'),3200); }
+
+let rv;
+function finish(){
+  if (stage.classList.contains('done')) return;
+  stage.classList.remove('playing'); stage.classList.add('done');
+  clearTimeout(rv); rv=setTimeout(()=>stage.classList.add('reveal'),1300);
+  try { v.pause(); if (v.duration) v.currentTime = v.duration - 0.05; } catch(e){}
+}
+function start(){
+  $('intro').classList.add('hide');
+  clearTimeout(rv); stage.classList.remove('done','reveal'); stage.classList.add('playing');
+  v.currentTime = 0;
+  const p = v.play();
+  if (p && p.catch) p.catch(() => { v.muted = true; $('mute').textContent='🔇'; v.play().catch(finish); });
+}
+$('intro').addEventListener('click', start);
+v.addEventListener('ended', finish);
+v.addEventListener('timeupdate', () => { if (v.duration && v.currentTime >= v.duration - 0.08) finish(); });
+$('skip').addEventListener('click', e => { e.stopPropagation(); finish(); });
+$('replay').addEventListener('click', e => { e.stopPropagation(); start(); });
+$('mute').addEventListener('click', e => {
+  e.stopPropagation(); v.muted = !v.muted; $('mute').textContent = v.muted ? '🔇' : '🔊';
+});
+</script>
+</body>
+</html>
