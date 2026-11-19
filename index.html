@@ -33,33 +33,20 @@
 
   /* Tela de abertura */
   .intro{
-    position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;
-    text-align:center;padding:10% 8%;cursor:pointer;
-    background:
-      radial-gradient(ellipse at 50% 40%, rgba(255,240,245,.25), rgba(60,10,30,.55) 75%),
-      url(capa.jpg) center/cover;
+    position:absolute;inset:0;z-index:5;cursor:pointer;
+    background:url(capa.jpg) center/cover;
+    display:flex;align-items:flex-end;justify-content:center;padding-bottom:9%;
     transition:opacity .7s ease, visibility .7s;
   }
   .intro.hide{opacity:0;visibility:hidden}
-  .card{
-    background:rgba(255,238,243,.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-    border:1.5px solid rgba(255,255,255,.9);border-radius:22px;padding:9% 8% 8%;width:100%;
-    box-shadow:0 10px 40px rgba(80,10,40,.35), inset 0 0 0 6px rgba(255,255,255,.35);
-  }
-  .card small{display:block;font-size:clamp(11px,3.4vw,15px);letter-spacing:.18em;text-transform:uppercase;color:var(--rose-soft);font-weight:600}
-  .card h1{font-family:'Great Vibes',cursive;font-weight:400;font-size:clamp(46px,15vw,74px);line-height:1.05;margin:.25em 0 .05em;
-    background:linear-gradient(180deg,#8f8a93,#d9d6dc 45%,#6f6a74);-webkit-background-clip:text;background-clip:text;color:transparent;
-    filter:drop-shadow(0 1px 0 rgba(255,255,255,.8))}
-  .card p{font-size:clamp(13px,3.9vw,17px);color:var(--rose)}
-  .open{
-    margin-top:1.4em;display:inline-flex;align-items:center;gap:.5em;border:0;cursor:pointer;
-    font:600 clamp(14px,4vw,17px) 'Quicksand',sans-serif;color:#fff;letter-spacing:.04em;
-    padding:.95em 1.6em;border-radius:999px;
-    background:linear-gradient(135deg,#d4547d,#9a2245);box-shadow:0 6px 20px rgba(154,34,69,.45);
+  .tap{
+    font:600 clamp(13px,3.8vw,16px) 'Quicksand',sans-serif;color:#fff;letter-spacing:.06em;
+    padding:.8em 1.5em;border-radius:999px;
+    background:rgba(154,34,69,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+    border:1px solid rgba(255,255,255,.55);box-shadow:0 4px 18px rgba(80,10,40,.35);
     animation:pulse 2s ease-in-out infinite;
   }
-  @keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 6px 20px rgba(154,34,69,.45)}50%{transform:scale(1.05);box-shadow:0 8px 30px rgba(212,84,125,.6)}}
-  .hint{margin-top:1em;font-size:12px;color:rgba(154,34,69,.75)}
+  @keyframes pulse{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.06);opacity:1}}
 
   /* Tela (vídeo + convite final) que encolhe para revelar os botões */
   .screen{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;
@@ -113,13 +100,7 @@
   </nav>
 
   <div class="intro" id="intro">
-    <div class="card">
-      <small>Você recebeu um convite</small>
-      <h1>Ana Julia</h1>
-      <p>Meus 15 anos ✨</p>
-      <button class="open" id="open">💌 Toque para abrir</button>
-      <div class="hint">Aumente o volume 🔊</div>
-    </div>
+    <div class="tap">✨ Toque para abrir</div>
   </div>
 
   <div class="ctl">
