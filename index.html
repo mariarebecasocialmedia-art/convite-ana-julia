@@ -89,6 +89,7 @@
 <div class="bg"></div>
 <main class="stage" id="stage">
   <div class="screen">
+    <audio id="m" src="musica.mp3" loop preload="auto"></audio>
     <video id="v" src="video.mp4" playsinline webkit-playsinline preload="auto" poster="capa.jpg"></video>
     <img class="final" src="final.jpg" alt="Convite dos 15 anos de Ana Julia — 05/12/2026 às 20h, Talina Eventos, Rua Pedro Suzart, 1370, Brasília, Feira de Santana - BA">
   </div>
@@ -143,12 +144,15 @@ function finish(){
   clearTimeout(rv); rv=setTimeout(()=>stage.classList.add('reveal'),1300);
   try { v.pause(); if (v.duration) v.currentTime = v.duration - 0.05; } catch(e){}
 }
+const m = $('m'); let muted = false, wantMusic = false;
+function playMusic(){ if (muted) return; const p = m.play(); if (p && p.catch) p.catch(()=>{}); }
 function start(){
   $('intro').classList.add('hide');
   clearTimeout(rv); stage.classList.remove('done','reveal'); stage.classList.add('playing');
-  v.currentTime = 0;
+  v.currentTime = 0; try { m.currentTime = 0; } catch(e){}
+  wantMusic = true; playMusic();
   const p = v.play();
-  if (p && p.catch) p.catch(() => { v.muted = true; $('mute').textContent='🔇'; v.play().catch(finish); });
+  if (p && p.catch) p.catch(() => { v.muted = true; v.play().catch(finish); });
 }
 $('intro').addEventListener('click', start);
 v.addEventListener('ended', finish);
@@ -156,7 +160,13 @@ v.addEventListener('timeupdate', () => { if (v.duration && v.currentTime >= v.du
 $('skip').addEventListener('click', e => { e.stopPropagation(); finish(); });
 $('replay').addEventListener('click', e => { e.stopPropagation(); start(); });
 $('mute').addEventListener('click', e => {
-  e.stopPropagation(); v.muted = !v.muted; $('mute').textContent = v.muted ? '🔇' : '🔊';
+  e.stopPropagation(); muted = !muted; v.muted = muted;
+  if (muted) m.pause(); else if (wantMusic) playMusic();
+  $('mute').textContent = muted ? '🔇' : '🔊';
+});
+/* pausa a música quando a pessoa sai para o mapa/WhatsApp/site e retoma ao voltar */
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) m.pause(); else if (wantMusic) playMusic();
 });
 </script>
 </body>
