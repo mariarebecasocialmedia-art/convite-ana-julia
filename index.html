@@ -89,8 +89,8 @@
 <div class="bg"></div>
 <main class="stage" id="stage">
   <div class="screen">
-    <audio id="m" src="musica.mp3" loop preload="auto"></audio>
-    <video id="v" src="video.mp4" playsinline webkit-playsinline preload="auto" poster="capa.jpg"></video>
+    <audio id="m" src="musica.mp3" preload="auto"></audio>
+    <video id="v" src="video.mp4" muted playsinline webkit-playsinline preload="auto" poster="capa.jpg"></video>
     <img class="final" src="final.jpg" alt="Convite dos 15 anos de Ana Julia — 05/12/2026 às 20h, Talina Eventos, Rua Pedro Suzart, 1370, Brasília, Feira de Santana - BA">
   </div>
 
@@ -149,18 +149,22 @@ function playMusic(){ if (muted) return; const p = m.play(); if (p && p.catch) p
 function start(){
   $('intro').classList.add('hide');
   clearTimeout(rv); stage.classList.remove('done','reveal'); stage.classList.add('playing');
-  v.currentTime = 0; try { m.currentTime = 0; } catch(e){}
+  v.muted = true; v.currentTime = 0; try { m.currentTime = 0; } catch(e){}
   wantMusic = true; playMusic();
   const p = v.play();
-  if (p && p.catch) p.catch(() => { v.muted = true; v.play().catch(finish); });
+  if (p && p.catch) p.catch(() => finish());
 }
+/* quando a música chega ao fim, recomeça depois da abertura do livro (sem repetir o som do livro) */
+m.addEventListener('ended', () => { try { m.currentTime = 34; } catch(e){} playMusic(); });
+/* se o sistema pausar a música por engano enquanto o convite está aberto, retoma */
+m.addEventListener('pause', () => { if (wantMusic && !muted && !document.hidden) setTimeout(playMusic, 250); });
 $('intro').addEventListener('click', start);
 v.addEventListener('ended', finish);
 v.addEventListener('timeupdate', () => { if (v.duration && v.currentTime >= v.duration - 0.08) finish(); });
 $('skip').addEventListener('click', e => { e.stopPropagation(); finish(); });
 $('replay').addEventListener('click', e => { e.stopPropagation(); start(); });
 $('mute').addEventListener('click', e => {
-  e.stopPropagation(); muted = !muted; v.muted = muted;
+  e.stopPropagation(); muted = !muted;
   if (muted) m.pause(); else if (wantMusic) playMusic();
   $('mute').textContent = muted ? '🔇' : '🔊';
 });
